@@ -30,7 +30,7 @@ def gps_random_location() -> str:
 def send_gps_data(car_name: str, timedelta: int) -> None:
     # Initialize MQTT spoofer
     print("[send_gps_data] Initialize client and connect with broker")
-    client = mqtt.Client("data_spoofer")
+    client = mqtt.Client("data_spoofer_{}".format(car_name))
     client.connect("127.0.0.1")
 
     # Loop and send information to MQTT topic
