@@ -17,13 +17,14 @@ def argument_list() -> argparse.Namespace:
 
 
 # Random GPS location function
-def gps_random_location() -> str:
+def gps_random_location() -> str: 
     print("[gps_random_location] Generating GPS data")
+    timestamp = str(int(time.time()))
     latitude = str(random.uniform(-90,90))
     longitude = str(random.uniform(-180,180))
     altitude = str(random.uniform(0,8100))
 
-    return "|".join([latitude, longitude, altitude])
+    return "|".join([timestamp, latitude, longitude, altitude])
 
 
 # Main function
