@@ -29,7 +29,7 @@ class Truck(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT, null=True)
 
     def __str__(self):
-        return f"{self.model} {self.engine_size}"
+        return f"{self.truck_name} {self.engine_size}"
 
 
 class Gps(models.Model):
