@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class DemoTaskConfig(AppConfig):
+class DriverCarAppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'demo_task'
+    name = 'driver_car_app'
