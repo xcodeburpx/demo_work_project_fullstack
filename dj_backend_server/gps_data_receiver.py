@@ -8,7 +8,7 @@ import paho.mqtt.client as mqtt
 # On connect method - subscribe to all MQTT topics - mostly it will be GPS data
 def on_connect(client, userdata, flags, rc):  # The callback for when the client connects to the broker
     print("Connected with result code {0}".format(str(rc)))  # Print result of connection attempt
-    client.subscribe("#")  # Subscribe to all topics, receive any messages published on it
+    client.subscribe("+/gps")  # Subscribe to all topics, receive any messages published on it
 
 
 # On message method - receive new message and handle it.
