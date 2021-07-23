@@ -2,7 +2,7 @@ from celery.decorators import task
 from celery.utils.log import get_task_logger
 from .models import Truck, Gps
 
-import datetime
+from datetime import datetime
 
 logger = get_task_logger(__name__)
 @task(name='database_parser')
@@ -13,7 +13,7 @@ def database_parser(data: list) -> None:
     car_name = mqtt_topic.split("/")[0]
 
     # Search for a proper truck
-    truck = Truck.objects.filter(truck__name__iexact=car_name)
+    truck = Truck.objects.filter(truck_name__iexact=car_name).first()
 
     # If truck was found - create new GPS record:
     if(truck):
