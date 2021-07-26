@@ -21,7 +21,7 @@ from django.conf import settings
 
 
 urlpatterns = [
-    path("", include("driver_car_app.urls"), name="car_gps_records"),
+    path("gps/", include("driver_car_app.urls"), name="car_gps_records"),
     path('admin/', admin.site.urls),
     path("__debug__", include(debug_toolbar.urls)),
 ]
