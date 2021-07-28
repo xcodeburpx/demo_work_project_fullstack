@@ -3,8 +3,9 @@ from celery.utils.log import get_task_logger
 from .models import Truck, Gps
 
 from datetime import datetime
-
 logger = get_task_logger(__name__)
+
+# Celery task - collect data and save to database
 @task(name='database_parser')
 def database_parser(data: list) -> None:
 
