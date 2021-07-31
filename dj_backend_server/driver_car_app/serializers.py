@@ -2,6 +2,7 @@ from .models import Gps
 from rest_framework import serializers
 
 
+# Simple data serializer, it should be enough
 class GpsSerializer(serializers.ModelSerializer):
     truck = serializers.StringRelatedField()
 

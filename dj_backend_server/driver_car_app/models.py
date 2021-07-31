@@ -1,6 +1,7 @@
 from django.db import models
 
 
+# Driver class - correlate to trucks
 class Driver(models.Model):
     first_name = models.CharField(max_length=300)
     last_name = models.CharField(max_length=300)
@@ -10,6 +11,7 @@ class Driver(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 
+# Brand - check hwo choices work
 class Brand(models.Model):
     brand_name = models.CharField(
         max_length=32,
@@ -18,9 +20,7 @@ class Brand(models.Model):
     def __str__(self):
         return f"{self.brand_name}"
 
-
-# TODO:
-# Change field to use proper fields in MQTT response
+# Truck class - correlate GPS records with vehicle
 class Truck(models.Model):
     truck_name = models.CharField(max_length=300)
     engine_size = models.DecimalField(
@@ -31,7 +31,7 @@ class Truck(models.Model):
     def __str__(self):
         return f"{self.truck_name}"
 
-
+# Gps class - hold Gps records in database
 class Gps(models.Model):
     timestamp = models.DateTimeField()
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE, related_name="locations")
