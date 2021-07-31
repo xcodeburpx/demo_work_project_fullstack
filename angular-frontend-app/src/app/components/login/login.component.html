@@ -1,0 +1,36 @@
+<h4 class="card-title text-center mb-4 mt-1">Sign in</h4>
+<article class="card-body" *ngIf="!_bknConnService.token">
+  <div class="form-group" *ngIf="!_bknConnService.token">
+	<div class="input-group">
+		<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+		 </div>
+		<input class="form-control" name="login-username" [(ngModel)]="user.username" placeholder="Username" type="text">
+        <span *ngFor="let error of _bknConnService.errors.username"><br />
+            {{ error }}</span>
+    </div> <!-- input-group.// -->
+  </div> <!-- form-group// -->
+  <div class="form-group" *ngIf="!_bknConnService.token">
+	<div class="input-group">
+		<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+		 </div>
+	    <input class="form-control" name="login-password" [(ngModel)]="user.password" placeholder="******" type="password">
+        <span *ngFor="let error of _bknConnService.errors.password"><br />
+            {{ error }}</span>
+    </div> <!-- input-group.// -->
+  </div> <!-- form-group// -->
+  <div class="form-group">
+	<button (click)="login()" type="submit" class="btn btn-primary btn-block"> Login  </button>
+	</div> <!-- form-group// -->
+  <div class="col-sm-12">
+    <span *ngFor="let error of _bknConnService.errors.non_field_errors">{{ error }}<br /></span>
+  </div>
+</article>
+<div class="row" *ngIf="_bknConnService.token">
+  <div class="col-sm-12">You are logged in as {{ _bknConnService.username }}.<br />
+    Token Expires: {{ _bknConnService.token_expires }}<br />
+    <button (click)="refreshToken()" class="btn btn-primary">Refresh Token</button>
+    <button (click)="logout()" class="btn btn-primary">Log Out</button>
+  </div>
+</div>
