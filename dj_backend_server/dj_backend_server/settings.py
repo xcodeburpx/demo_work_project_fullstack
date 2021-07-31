@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rest_framework',
     'driver_car_app',
-    'accounts',
 ]
 
 MIDDLEWARE = [
