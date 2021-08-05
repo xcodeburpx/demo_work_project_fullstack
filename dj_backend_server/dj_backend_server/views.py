@@ -10,8 +10,9 @@ from django.views.decorators.csrf import csrf_exempt
 def user_login(request):
     if request.method == 'POST':
         if not request.user.is_authenticated:
-            username = request.POST['username']
-            password = request.POST['password']
+
+            username = json.loads(request.body)['username']
+            password = json.loads(request.body)['password']
 
             user = authenticate(request, username=username, password=password)
             if user is not None:
@@ -27,7 +28,7 @@ def user_login(request):
                 return JsonResponse({'status': 'OK', 'data': data})
             else:
                 print(f'error: the username {username} or password is incorrect.')
-                return HttpResponse(status=401, \
+                return HttpResponse(status=401,
                                     content=f'The username {username} or password is incorrect.')
         else:
             return JsonResponse({'status': 'User already logged in'})
@@ -40,3 +41,15 @@ def user_logout(request):
         return JsonResponse({'status': 'OK'})
     else:
         return JsonResponse({'status': 'User already logged out'})
+
+@require_http_methods(['GET', 'OPTIONS'])
+def user_data(request):
+    if request.user.is_authenticated:
+        data = {
+            'username': request.user.username,
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name
+        }
+        return JsonResponse({'status': 'OK', 'data': data})
+    else:
+        return JsonResponse({'status': 'No user logged in'})

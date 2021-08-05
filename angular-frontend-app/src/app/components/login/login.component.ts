@@ -23,10 +23,6 @@ export class LoginComponent implements OnInit {
     this._bknConnService.login({'username': this.user.username, 'password': this.user.password});
   }
  
-  refreshToken() {
-    this._bknConnService.refreshToken();
-  }
- 
   logout() {
     this._bknConnService.logout();
   }

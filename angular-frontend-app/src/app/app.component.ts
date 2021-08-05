@@ -14,13 +14,6 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-    this.showMessage();
   }
 
-  showMessage(){
-    this.bckConnService.getMessage().subscribe(data => {
-      this.msg = data,
-      console.log(this.msg);
-    })
-  }
 }

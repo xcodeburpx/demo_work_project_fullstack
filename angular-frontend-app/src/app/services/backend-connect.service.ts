@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -12,36 +11,45 @@ export class BackendConnectService {
   
   // http options used for making API calls
   private httpOptions: any;
-  
-  // the actual JWT token
-  public token: string;
- 
-  // the token expiration date
-  public token_expires: Date;
- 
-  // the username of the logged in user
-  public username: string;
  
   // error messages received from the login attempt
   public errors: any = [];
   
   constructor(private http: HttpClient) {
     this.httpOptions = {
-      headers: new HttpHeaders({'Content-Type': 'application/json'})
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      withCredentials: true
     };
   }
 
-  getMessage() {
-    return this.http.get(this.api_url);
+  public login(user) {
+    this.http.post(this.api_url + 'api/login/', JSON.stringify(user), this.httpOptions).subscribe(
+      data => {
+        console.log("User logged in successfully");
+        console.log(data);
+        this.setUserData(data['data']);
+      },
+      err => {
+        console.log("User could not log in");
+        this.errors = err['error'];
+      }
+    );
   }
 
-  // Uses http.post() to get an auth token from djangorestframework-jwt endpoint
-  public login(user) {
-    this.http.post(this.api_url + 'api/token/', JSON.stringify(user), this.httpOptions).subscribe(
+  public logout() {
+    this.http.get(this.api_url + 'api/logout/', this.httpOptions).subscribe(
       data => {
-        console.log("User authenticated");
-        console.log(data);
-        this.updateData(data);
+        if(data['status'] == "OK")
+        {
+          console.log("User logged out successfully");
+          console.log(data);
+          this.removeUserData();
+        }
+        else
+        {
+          console.log("User could not log out");
+          console.log(data);
+        }
       },
       err => {
         console.log("User could not authenticate");
@@ -50,38 +58,29 @@ export class BackendConnectService {
     );
   }
 
-  // Refreshes the JWT token, to extend the time the user is logged in
-  public refreshToken() {
-    this.http.post(this.api_url + 'api/token/refresh/', JSON.stringify({token: this.token['refresh']}), this.httpOptions).subscribe(
-      data => {
-        console.log("Token has been refreshed");
-        console.log(data);
-        this.updateData(data);
-      },
-      err => {
-        console.log("Token could not be refreshed");
-        this.errors = err['error'];
-      }
-    );
+  public getUserData(): string{
+    return localStorage.getItem('userName');
   }
 
-  public logout() {
-    console.log("Nullifying token refresh");
-    this.token = null;
-    this.token_expires = null;
-    this.username = null;
+  public ifUserLoggedIn(): boolean {
+    if(localStorage.getItem('userName') === null)
+    {
+      return false;
+    }
+    return true;
   }
- 
-  private updateData(token) {
-    console.log("Updating data about token value");
-    console.log(token);
-    this.token = token;
-    this.errors = [];
- 
-    // decode the token to read the username and expiration timestamp
-    const token_parts = this.token['refresh'].split(/\./);
-    const token_decoded = JSON.parse(window.atob(token_parts[1]));
-    this.token_expires = new Date(token_decoded.exp * 1000);
-    this.username = token_decoded.username;
+
+  private setUserData(data): void {
+    const userName = data['username'];
+    const firstName = data['first_name'];
+    const lastName = data['last_name'];
+
+    localStorage.setItem('userName',userName);
+    localStorage.setItem('firstName',firstName);
+    localStorage.setItem('lastName',lastName);
+  }
+
+  private removeUserData(): void{
+    localStorage.clear();
   }
 }

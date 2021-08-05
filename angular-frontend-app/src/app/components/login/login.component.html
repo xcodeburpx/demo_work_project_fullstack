@@ -1,6 +1,6 @@
 <h4 class="card-title text-center mb-4 mt-1">Sign in</h4>
-<article class="card-body" *ngIf="!_bknConnService.token">
-  <div class="form-group" *ngIf="!_bknConnService.token">
+<article class="card-body" *ngIf="!_bknConnService.ifUserLoggedIn()">
+  <div class="form-group" *ngIf="!_bknConnService.ifUserLoggedIn()">
 	<div class="input-group">
 		<div class="input-group-prepend">
 		    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
@@ -10,7 +10,7 @@
             {{ error }}</span>
     </div> <!-- input-group.// -->
   </div> <!-- form-group// -->
-  <div class="form-group" *ngIf="!_bknConnService.token">
+  <div class="form-group" *ngIf="!_bknConnService.ifUserLoggedIn()">
 	<div class="input-group">
 		<div class="input-group-prepend">
 		    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
@@ -27,10 +27,8 @@
     <span *ngFor="let error of _bknConnService.errors.non_field_errors">{{ error }}<br /></span>
   </div>
 </article>
-<div class="row" *ngIf="_bknConnService.token">
-  <div class="col-sm-12">You are logged in as {{ _bknConnService.username }}.<br />
-    Token Expires: {{ _bknConnService.token_expires }}<br />
-    <button (click)="refreshToken()" class="btn btn-primary">Refresh Token</button>
+<div class="row" *ngIf="_bknConnService.ifUserLoggedIn()">
+  <div class="col-sm-12">You are logged in as {{ _bknConnService.getUserData() }}.<br />
     <button (click)="logout()" class="btn btn-primary">Log Out</button>
   </div>
 </div>
