@@ -25,9 +25,8 @@ def get_truck_list(request):
 
 @login_required
 @require_http_methods(['GET', 'OPTIONS'])
-def get_truck_newest(request):
+def get_truck_newest(request, truck_name):
     if request.method == "GET":
-        truck_name = json.loads(request.body)['truck_name']
         try:
             gps_data = Gps.objects.filter(truck__truck_name=truck_name).order_by("timestamp").first()
             if gps_data is None:
@@ -37,4 +36,4 @@ def get_truck_newest(request):
             gps_data.pop("id")
             return JsonResponse({'status': 'OK', 'data': gps_data})
         except Gps.DoesNotExist:
-            return JsonResponse({'status': f'Truck {truck_name} does not exist'})
+            return JsonResponse({'status': f'Data for truck {truck_name} does not exist'})

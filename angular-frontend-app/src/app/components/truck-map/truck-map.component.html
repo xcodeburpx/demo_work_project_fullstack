@@ -1,13 +1,33 @@
-<google-map
-  height="500px"
-  width="100%"
-  [center]="center"
->
-<map-marker
-[position]="marker.position"
-[label]="marker.label"
-[title]="marker.title"
-[options]="marker.options"
->
-</map-marker>
-</google-map>
+
+<h4 class="card-title text-center mb-4 mt-1">Get truck location</h4>
+
+<div class="container" *ngIf="ifTruckDataExist()">
+    <google-map
+    [height]="height"
+    [width]="width"
+    [center]="center"
+  >
+  </google-map>
+</div>
+
+<article class="card-body" *ngIf="ifTruckListExist()">
+  <div class="form-group" >
+    <select class="form-control" [(ngModel)]="truck_name">
+      <option value="" selected disabled>Please select truck name</option>
+      <option *ngFor="let name of truck_list" [value]="name">
+        {{name}}
+      </option>
+    </select>
+  </div> <!-- form-group// -->
+  <div class="form-group">
+    <button (click)="getTruckGpsData()" type="submit" class="btn btn-primary btn-block"> Get Location </button>
+  </div> <!-- form-group// -->
+</article>
+
+<div class="container" *ngIf="!ifTruckListExist()">
+  <div class="alert alert-danger" role="alert">
+    <p class="font-weight-bold">Error</p>
+    <p>Problems with communication to server!</p>
+  </div>
+</div>
+

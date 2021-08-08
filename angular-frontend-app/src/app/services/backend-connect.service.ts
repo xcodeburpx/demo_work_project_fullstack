@@ -58,6 +58,15 @@ export class BackendConnectService {
     );
   }
 
+  async getTruckList() {
+    return await this.http.get(this.api_url + 'api/gps/truck_list/', this.httpOptions).toPromise();
+
+  }
+
+  async getTruckGpsData(truck_name) {
+    return await this.http.get(this.api_url + 'api/gps/newest/' + truck_name + '/', this.httpOptions).toPromise();
+  }
+
   public getUserData(): string{
     return localStorage.getItem('userName');
   }
