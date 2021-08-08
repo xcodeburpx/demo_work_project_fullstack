@@ -24,9 +24,9 @@ def get_truck_list(request):
 
 
 @login_required
-@require_http_methods(['POST', 'OPTIONS'])
+@require_http_methods(['GET', 'OPTIONS'])
 def get_truck_newest(request):
-    if request.method == "POST":
+    if request.method == "GET":
         truck_name = json.loads(request.body)['truck_name']
         try:
             gps_data = Gps.objects.filter(truck__truck_name=truck_name).order_by("timestamp").first()
