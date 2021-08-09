@@ -1,13 +1,48 @@
 
 <h4 class="card-title text-center mb-4 mt-1">Get truck location</h4>
 
-<div class="container" *ngIf="ifTruckDataExist()">
-    <google-map
-    [height]="height"
-    [width]="width"
-    [center]="center"
-  >
-  </google-map>
+<div class="container-fluid" *ngIf="ifTruckDataExist()">
+
+  <div class ="row">
+    <div class ="col-md-6 col-sm-6">
+      <google-map
+        [height]="height"
+        [width]="width"
+        [center]="center"
+        [zoom]="zoom"
+      >
+        <map-marker
+        [position]="marker.position"
+        [label]="marker.label"
+        [title]="marker.title"
+        [options]="marker.options"
+        >
+        </map-marker>
+      </google-map>
+    </div>
+    <div class ="col-md-6 col-sm-6">
+      <table class="table">
+        <tbody>
+          <tr>
+            <th>Truck Name</th>
+            <td>{{truck_name}}</td>
+          </tr>
+          <tr>
+            <th>Timestamp</th>
+            <td>{{truck_data.timestamp}}</td>
+          </tr>
+          <tr>
+            <th>Longitude</th>
+            <td>{{truck_data.longitude}}</td>
+          </tr>
+          <tr>
+            <th>Latitude</th>
+            <td>{{truck_data.latitude}}</td>
+          </tr>
+        </tbody>
+      </table>
+     </div>
+  </div>
 </div>
 
 <article class="card-body" *ngIf="ifTruckListExist()">

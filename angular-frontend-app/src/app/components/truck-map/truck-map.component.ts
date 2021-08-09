@@ -17,6 +17,21 @@ export class TruckMapComponent implements OnInit {
   }
   height = "500px";
   width = "100%"
+  zoom = 6;
+
+  // Initial Gooogle map tracker value
+  marker = {
+    position: {
+      lat: this.center.lat,
+      lng: this.center.lng,
+    },
+    label: {
+      color: 'red',
+      text: 'Initial marker',
+    },
+    title: 'Initial marker',
+    options: { animation: google.maps.Animation.DROP },
+  }
 
   // Initial truck_data and truck_list objects
   private truck_data: any = null
@@ -62,6 +77,20 @@ export class TruckMapComponent implements OnInit {
       lat: parseFloat(this.truck_data['longitude']),
       lng: parseFloat(this.truck_data['latitude']),
     }
+
+    this.marker.position = {
+      lat: parseFloat(this.truck_data['longitude']),
+      lng: parseFloat(this.truck_data['latitude']),
+    }
+
+    this.marker.label = {
+      color: 'green',
+      text: 'Truck ' + this.truck_name,
+    }
+
+    this.marker.title = 'Truck ' + this.truck_name
+    
+
   }
 
   public ifTruckDataExist(): boolean{

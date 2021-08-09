@@ -26,8 +26,8 @@ def database_parser(data: list) -> None:
         timestamp = datetime.fromtimestamp(timestamp)
 
         # Convert string data to float
-        longitude = float(gps_data[1])
-        latitude = float(gps_data[2])
+        longitude = float(gps_data[2])
+        latitude = float(gps_data[1])
         altitude = float(gps_data[3])
 
         # Create new Gps object

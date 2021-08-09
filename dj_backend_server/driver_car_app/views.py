@@ -28,7 +28,10 @@ def get_truck_list(request):
 def get_truck_newest(request, truck_name):
     if request.method == "GET":
         try:
-            gps_data = Gps.objects.filter(truck__truck_name=truck_name).order_by("timestamp").first()
+            gps_data = Gps.objects.filter(truck__truck_name=truck_name) \
+                                  .order_by("timestamp") \
+                                  .reverse() \
+                                  .first()
             if gps_data is None:
                 raise Gps.DoesNotExist()
             gps_data = model_to_dict(gps_data)
