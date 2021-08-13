@@ -19,7 +19,7 @@ export class TruckMapComponent implements OnInit {
   width = "100%"
   zoom = 6;
 
-  // Initial Gooogle map tracker value
+  // Initial Google map tracker value
   marker = {
     position: {
       lat: this.center.lat,
