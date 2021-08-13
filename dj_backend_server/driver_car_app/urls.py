@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import GpsListView, api_get_newest_location
+from .views import get_truck_newest, get_truck_list
 
 # Defined REST URIs for requests
 urlpatterns = [
-    path("", GpsListView.as_view()),
-    path("newest/<truck_name>", api_get_newest_location, name="newest_gps")
+    path("newest/<truck_name>/", get_truck_newest, name="truck_newest"),
+    path("truck_list/", get_truck_list, name="truck_list"),
 ]

@@ -1,36 +1,42 @@
+import json
+from django.contrib.auth import login
 from django.db import reset_queries
-from .models import Gps
-from rest_framework import viewsets, permissions, generics, status
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.authentication import SessionAuthentication, \
-                                          BasicAuthentication
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from .serializers import GpsSerializer
+from .models import Gps, Truck
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.forms.models import model_to_dict
 
 # Create your views here.
 # TODO:
 # Protect these requests - add is authenticated closure/decorator
-class GpsListView(generics.ListAPIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    queryset = Gps.objects.all().order_by('timestamp')
-    serializer_class = GpsSerializer
-
-
-@api_view(["GET",])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
-def api_get_newest_location(request, truck_name):
-    try:
-        gps = Gps.objects.filter(truck__truck_name=truck_name).order_by("timestamp").first()
-        if gps is None:
-            raise Gps.DoesNotExist()
-    except Gps.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
+@login_required
+@require_http_methods(['GET', 'OPTIONS'])
+def get_truck_list(request):
     if request.method == "GET":
-        serializer = GpsSerializer(gps)
-        return Response(serializer.data)
+        try:
+            trucks = Truck.objects.values_list('truck_name', flat=True)
+            trucks = list(trucks)
+            return JsonResponse({'status': 'OK', 'data': trucks})
+        except:
+            return JsonResponse({'status': 'Something went wrong!'})
+
+
+
+@login_required
+@require_http_methods(['GET', 'OPTIONS'])
+def get_truck_newest(request, truck_name):
+    if request.method == "GET":
+        try:
+            gps_data = Gps.objects.filter(truck__truck_name=truck_name) \
+                                  .order_by("timestamp") \
+                                  .reverse() \
+                                  .first()
+            if gps_data is None:
+                raise Gps.DoesNotExist()
+            gps_data = model_to_dict(gps_data)
+            gps_data["truck"] = truck_name
+            gps_data.pop("id")
+            return JsonResponse({'status': 'OK', 'data': gps_data})
+        except Gps.DoesNotExist:
+            return JsonResponse({'status': f'Data for truck {truck_name} does not exist'})
