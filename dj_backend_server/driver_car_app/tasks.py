@@ -20,6 +20,10 @@ def database_parser(data: list) -> None:
     mqtt_topic, gps_data = data[0], data[1]
     car_name = mqtt_topic.split("/")[0]
 
+    gps_wb_data = dict()
+    gps_wb_data['truck'] = car_name
+
+
     # Search for a proper truck
     truck = Truck.objects.filter(truck_name__iexact=car_name).first()
 
@@ -31,11 +35,16 @@ def database_parser(data: list) -> None:
         # Calculate proper timestamp
         timestamp = int(gps_data[0])
         timestamp = datetime.fromtimestamp(timestamp)
+        gps_wb_data['timestamp'] = timestamp.strftime("%Y-%m-%d %H:%M:%S")
 
         # Convert string data to float
         longitude = float(gps_data[2])
         latitude = float(gps_data[1])
         altitude = float(gps_data[3])
+        
+        gps_wb_data['longitude'] = longitude
+        gps_wb_data['latitude'] = latitude
+        gps_wb_data['altitude'] = altitude
 
         # Create new Gps object
         gps_record = Gps(timestamp=timestamp, truck=truck, longitude=longitude,
@@ -43,14 +52,6 @@ def database_parser(data: list) -> None:
 
         # Save the record
         gps_record.save()
-        # print(f"Gps Record: {gps_record}")
-
-        # gps_record_retrieve = Gps.objects.get(pk=gps_record.pk)
-        
-        # gps_dict = model_to_dict(gps_record_retrieve)
-        # print(f"Gps Dictionary {gps_dict}")
-        gps_pseudo_array = serializers.serialize('json', [gps_record], ensure_ascii=False)
-        gps_json = gps_pseudo_array[1:-1]
 
         # Send record to Websocket
         channel_layer = get_channel_layer()
@@ -58,7 +59,7 @@ def database_parser(data: list) -> None:
             'main',
             {
                     'type': 'gps_message',
-                    'message': gps_json
+                    'message': json.dumps(gps_wb_data)
             }
         )
 
