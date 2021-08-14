@@ -42,7 +42,17 @@ export class TruckTableComponent implements AfterViewInit {
   }
 
   onRowClicked(row){
-    this.selectedRow = row;
-    console.log(this.selectedRow);
+    if(row !== this.selectedRow)
+    {
+      this.selectedRow = row;
+      console.log(this.selectedRow);
+    }
+    else
+    {
+      this.selectedRow = {position: -1, 
+        name: 'Placeholder', 
+        weight: -1, 
+        symbol: 'X'};
+    }
   }
 }
