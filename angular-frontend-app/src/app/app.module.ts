@@ -11,6 +11,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './components/login/login.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { TruckMapComponent } from './components/truck-map/truck-map.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TruckTableComponent } from './components/truck-table/truck-table.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,7 @@ import { TruckMapComponent } from './components/truck-map/truck-map.component';
     LoginComponent,
     FooterComponent,
     TruckMapComponent,
+    TruckTableComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,6 +31,7 @@ import { TruckMapComponent } from './components/truck-map/truck-map.component';
     FormsModule,
     ReactiveFormsModule,
     GoogleMapsModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
