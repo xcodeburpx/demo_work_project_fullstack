@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     # 'rest_framework',
     'corsheaders',
+    'channels',
     'driver_car_app',
 ]
 
@@ -74,6 +75,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'dj_backend_server.wsgi.application'
+
+# ASGI configuration options
+ASGI_APPLICATION = "dj_backend_server.asgi.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 
 # Database
@@ -168,3 +180,5 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:4200',
 )
+
+
